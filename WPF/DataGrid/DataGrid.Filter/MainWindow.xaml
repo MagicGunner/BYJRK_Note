@@ -5,25 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:local="clr-namespace:DataGrid.Filter"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <DockPanel>
             <StackPanel Margin="5" Orientation="Horizontal" DockPanel.Dock="Bottom">
-                <Button Content="New Employee" Click="ButtonBase_OnClick" />
+                <Button Content="New Employee" Command="{Binding AddEmployeeCommand}" />
                 <hc:TextBox x:Name="FilterTextBox" Width="200" Margin="5 0 0 0"
+                            Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             hc:InfoElement.Placeholder="Filter data by name"
-                            InputMethod.IsInputMethodEnabled="False" TextChanged="FilterTextBox_OnTextChanged" />
+                            InputMethod.IsInputMethodEnabled="False" />
             </StackPanel>
             <DataGrid Name="DataGrid"
-                      d:ItemsSource="{d:SampleData ItemCount=10}"
+                      d:ItemsSource="{Binding Employees}"
+                      ItemsSource="{Binding EmployeeCollection}"
                       CanUserDeleteRows="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
                     <DataGridTextColumn Header="FirstName" Binding="{Binding FirstName}" />
                     <DataGridTextColumn Header="LastName" Binding="{Binding LastName}" />
-                    <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday}" />
+                    <DataGridTextColumn Header="Birthday" Binding="{Binding BirthDay}" />
                     <DataGridTextColumn Header="Salary" Binding="{Binding Salary}" />
                 </DataGrid.Columns>
             </DataGrid>
