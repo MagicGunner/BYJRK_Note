@@ -13,6 +13,10 @@ public partial class MainWindowViewModel : ObservableObject {
     [ObservableProperty]
     private ICollectionView _employeeCollection;
 
+
+    [ObservableProperty]
+    private IList _selectedItems;
+
     [ObservableProperty]
     private string? _key;
 
@@ -46,8 +50,13 @@ public partial class MainWindowViewModel : ObservableObject {
         EmployeeCollection.Refresh();
     }
 
+    // [RelayCommand]
+    // private void GetSumSalary(IList selectedItems) {
+    //     var sum = selectedItems.Cast<Employee>().Sum(e => e.Salary);
+    // }
+
     [RelayCommand]
-    private void GetSumSalary(IList selectedItems) {
-        var sum = selectedItems.Cast<Employee>().Sum(e => e.Salary);
+    private void GetSumSalary() {
+        var sum = SelectedItems.Cast<Employee>().Sum(e => e.Salary);
     }
 }
