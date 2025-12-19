@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:DataGrid"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
@@ -26,14 +27,15 @@
             <DataGrid Name="DataGrid"
                       d:ItemsSource="{Binding Employees}"
                       ItemsSource="{Binding EmployeeCollection}"
-                      local:MultiSelectorHelper.BindableSelectedItems="{Binding SelectedItems, Mode=OneWayToSource}"
-                      local:MultiSelectorHelper.MonitorSelectionChanged="True"
                       SelectionMode="Extended"
                       CanUserDeleteRows="False"
                       AutoGenerateColumns="False">
+                <i:Interaction.Behaviors>
+                    <local:SelectedItemsBehavior BindableSelectedItems="{Binding SelectedItems, Mode=OneWayToSource}" />
+                </i:Interaction.Behaviors>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}"></Setter>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
