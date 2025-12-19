@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -8,7 +10,7 @@ namespace DataGrid;
 
 public partial class MainWindowViewModel : ObservableObject {
     [ObservableProperty]
-    private List<Employee> _employees;
+    private ObservableCollection<Employee> _employees;
 
     [ObservableProperty]
     private IEnumerable<Employee> _employeeDisplay;
@@ -16,8 +18,18 @@ public partial class MainWindowViewModel : ObservableObject {
     // [ObservableProperty]
     // private ICollectionView _employeeCollection;
 
-    [ObservableProperty]
-    private int _pageNum = 1;
+    public int PageNum {
+        get;
+        set {
+            value = Math.Max(0, value);
+            value = Math.Min(value, MaxPageNum);
+            if (SetProperty(ref field, value)) {
+                OnPageNumChanged(value);
+            }
+        }
+    } = 1;
+
+    private int MaxPageNum => Employees.Count / PageSize + 1;
 
     /// <summary>
     /// 每一页能显示多少项目
@@ -31,7 +43,7 @@ public partial class MainWindowViewModel : ObservableObject {
     private string? _key;
 
     public MainWindowViewModel() {
-        Employees = Employee.FakeMany(100).ToList();
+        Employees = new ObservableCollection<Employee>(Employee.FakeMany(100));
         EmployeeDisplay = Employees.Take(PageSize);
         // EmployeeCollection = CollectionViewSource.GetDefaultView(Employees);
 
@@ -49,31 +61,33 @@ public partial class MainWindowViewModel : ObservableObject {
         //                                 if (PageNum < 1 || PageNum > Employees.Count / PageSize + 2) return false;
         //                                 return employee.Id >= (PageNum - 1) * PageSize && employee.Id < PageNum * PageSize;
         //                             };
+
+        Employees.CollectionChanged += OnCollectionChanged;
+    }
+
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
+        if (e.Action is NotifyCollectionChangedAction.Add or NotifyCollectionChangedAction.Remove) {
+            for (var i = 0; i < Employees.Count; i++) Employees[i].Id = i + 1;
+
+            OnPageNumChanged(PageNum);
+        }
     }
 
     [RelayCommand]
     private void AddEmployee() {
         Employees.Add(Employee.FakeOne());
-        // EmployeeCollection.Refresh();
     }
 
     [RelayCommand]
-    private void DeleteEmployees(IList selectedItems) {
-        foreach (var item in selectedItems.Cast<Employee>().ToList()) Employees.Remove(item);
-
-        for (var i = 0; i < Employees.Count; i++) Employees[i].Id = i + 1;
-
-        // EmployeeCollection.Refresh();
+    private void DeleteEmployees() {
+        var selectedEmployees = SelectedItems.Cast<Employee>().ToList();
+        for (var i = 0; i < selectedEmployees.Count; i++) {
+            if (i == 0) Employees.CollectionChanged -= OnCollectionChanged;
+            if (i == selectedEmployees.Count - 1) Employees.CollectionChanged += OnCollectionChanged;
+            Employees.Remove(selectedEmployees[i]);
+        }
     }
 
-    partial void OnKeyChanged(string? value) {
-        // EmployeeCollection.Refresh();
-    }
-
-    // [RelayCommand]
-    // private void GetSumSalary(IList selectedItems) {
-    //     var sum = selectedItems.Cast<Employee>().Sum(e => e.Salary);
-    // }
 
     [RelayCommand]
     private void GetSumSalary() {
@@ -88,17 +102,13 @@ public partial class MainWindowViewModel : ObservableObject {
     }
 
     [RelayCommand]
-    private void Go() {
-        // EmployeeCollection.Refresh();
-    }
-
-    [RelayCommand]
     private void GotoPage(string pageNum) {
         PageNum = int.TryParse(pageNum, out var num) ? num : 1;
-        EmployeeDisplay = Employees.Skip(PageSize * (PageNum - 1)).Take(PageSize);
+
+        // EmployeeDisplay = Employees.GetRange(PageSize * (PageNum - 1), Math.Min(PageSize, Employees.Count - PageSize * (PageNum - 1)));
     }
 
-    partial void OnPageNumChanged(int value) {
-        // EmployeeCollection.Refresh();
+    private void OnPageNumChanged(int value) {
+        EmployeeDisplay = Employees.Skip(PageSize * (PageNum - 1)).Take(PageSize);
     }
 }

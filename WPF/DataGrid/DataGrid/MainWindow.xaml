@@ -12,9 +12,7 @@
     <Grid>
         <DockPanel>
             <StackPanel Margin="5" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-                <!-- <Button Content="增加员工" Command="{Binding AddEmployeeCommand}" /> -->
-                <!-- <Button Content="删除员工" Command="{Binding DeleteEmployeesCommand}" -->
-                <!--         CommandParameter="{Binding ElementName=DataGrid, Path=SelectedItems}" /> -->
+                <Button Content="增加员工" Command="{Binding AddEmployeeCommand}" />
                 <!-- <Button Content="计算薪水综合" Command="{Binding GetSumSalaryCommand}" -->
                 <!--         Margin="5 0 0 0" /> -->
                 <!-- <Button Content="选中高薪" Command="{Binding CalculateCommand}" -->
@@ -28,27 +26,31 @@
                 <!--             Text="{Binding PageNum, UpdateSourceTrigger=PropertyChanged}" /> -->
                 <!-- <Button Content="Go" Margin="5 0 0 0" Command="{Binding GoCommand}" /> -->
 
-                <hc:TextBox Name="PageNumTextBox" hc:InfoElement.Placeholder="Page" />
-                <Button Content="Go" Margin="5 0 0 0" Command="{Binding GotoPageCommand}"
-                        CommandParameter="{Binding ElementName=PageNumTextBox, Path=Text}" />
+
+                <hc:TextBox Name="PageNumTextBox" hc:InfoElement.Placeholder="Page"
+                            Text="{Binding PageNum, UpdateSourceTrigger=PropertyChanged}" />
+
 
             </StackPanel>
             <DataGrid Name="DataGrid"
-                      d:ItemsSource="{Binding Employees}"
                       ItemsSource="{Binding EmployeeDisplay}"
                       SelectionMode="Extended"
                       CanUserDeleteRows="False"
+                      CanUserAddRows="False"
                       AutoGenerateColumns="False">
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding DeleteEmployeesCommand}" />
+                </DataGrid.InputBindings>
                 <i:Interaction.Behaviors>
                     <local:SelectedItemsBehavior BindableSelectedItems="{Binding SelectedItems, Mode=OneWayToSource}" />
                 </i:Interaction.Behaviors>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding AddEmployeeCommand}"
-                                               CommandParameter="{Binding ElementName=DataGrid}">
-                        </i:InvokeCommandAction>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+                <!-- <i:Interaction.Triggers> -->
+                <!--     <i:EventTrigger EventName="SelectionChanged"> -->
+                <!--         <i:InvokeCommandAction Command="{Binding AddEmployeeCommand}" -->
+                <!--                                CommandParameter="{Binding ElementName=DataGrid}"> -->
+                <!--         </i:InvokeCommandAction> -->
+                <!--     </i:EventTrigger> -->
+                <!-- </i:Interaction.Triggers> -->
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
