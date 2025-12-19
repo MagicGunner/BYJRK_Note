@@ -13,6 +13,13 @@ public partial class MainWindowViewModel : ObservableObject {
     [ObservableProperty]
     private ICollectionView _employeeCollection;
 
+    [ObservableProperty]
+    private int _pageNum = 1;
+
+    /// <summary>
+    /// 每一页能显示多少项目
+    /// </summary>
+    public const int PageSize = 15;
 
     [ObservableProperty]
     private IList _selectedItems;
@@ -21,14 +28,23 @@ public partial class MainWindowViewModel : ObservableObject {
     private string? _key;
 
     public MainWindowViewModel() {
-        Employees = Employee.FakeMany(10).ToList();
+        Employees = Employee.FakeMany(100).ToList();
         EmployeeCollection = CollectionViewSource.GetDefaultView(Employees);
-        EmployeeCollection.Filter = (item => {
-                                         if (string.IsNullOrEmpty(Key)) return true;
-                                         if (item is not Employee employee) return false;
-                                         if (employee.FirstName == null || employee.LastName == null) return false;
-                                         return employee.FirstName.Contains(Key) || employee.LastName.Contains(Key);
-                                     });
+
+        // 实现过滤功能
+        // EmployeeCollection.Filter = (item => {
+        //                                  if (string.IsNullOrEmpty(Key)) return true;
+        //                                  if (item is not Employee employee) return false;
+        //                                  if (employee.FirstName == null || employee.LastName == null) return false;
+        //                                  return employee.FirstName.Contains(Key) || employee.LastName.Contains(Key);
+        //                              });
+
+        // 通过过滤功能实现分页
+        EmployeeCollection.Filter = item => {
+                                        if (item is not Employee employee) return false;
+                                        if (PageNum < 1 || PageNum > Employees.Count / PageSize + 2) return false;
+                                        return employee.Id >= (PageNum - 1) * PageSize && employee.Id < PageNum * PageSize;
+                                    };
     }
 
     [RelayCommand]
@@ -64,6 +80,15 @@ public partial class MainWindowViewModel : ObservableObject {
     private void Calculate() {
         foreach (var employee in Employees) { employee.IsSelected = employee.Salary > 100000; }
 
+        EmployeeCollection.Refresh();
+    }
+
+    [RelayCommand]
+    private void Go() {
+        EmployeeCollection.Refresh();
+    }
+
+    partial void OnPageNumChanged(int value) {
         EmployeeCollection.Refresh();
     }
 }
