@@ -1,0 +1,59 @@
+﻿<Window x:Class="ValueConverterDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ValueConverterDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Converter"></BooleanToVisibilityConverter>
+        <local:BoolToVisibilityConverter x:Key="Converter1" UseHidden="False" Reversed="True"></local:BoolToVisibilityConverter>
+    </Window.Resources>
+    <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Background" Value="LightGreen" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Margin" Value="10" />
+            </Style>
+            <Style TargetType="ToggleButton">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="Padding" Value="8" />
+                <Setter Property="Width" Value="160" />
+                <Setter Property="Margin" Value="0 0 0 10" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Content" Value="Visible" />
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="False">
+                        <Setter Property="Content" Value="Collapsed" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </StackPanel.Resources>
+
+        <!-- 传统写法 -->
+        <!-- <Border -->
+        <!--     Visibility="{Binding ElementName=Check, Path=IsChecked, Converter={StaticResource Converter1}}"> -->
+        <!--     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" -->
+        <!--                Text="Visibility Controlled by CheckBox" /> -->
+        <!-- </Border> -->
+
+        <!-- 单例模式 -->
+        <!-- <Border -->
+        <!--     Visibility="{Binding ElementName=Check, Path=IsChecked, Converter={x:Static local:BoolToVisibilityConverter.Instance}}"> -->
+        <!--     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" -->
+        <!--                Text="Visibility Controlled by CheckBox" /> -->
+        <!-- </Border> -->
+
+
+        <Border
+            Visibility="{Binding ElementName=Check, Path=IsChecked, Converter={local:BoolToVisibilityConverter Reversed=True}}">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
+                       Text="Visibility Controlled by CheckBox" />
+        </Border>
+        <ToggleButton Name="Check" FontSize="24" IsChecked="True" />
+    </StackPanel>
+</Window>
