@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGrid", "DataGrid\DataGrid.csproj", "{53B77896-7519-4A9B-978F-47AA2350722F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPAndAP", "DPAndAP\DPAndAP.csproj", "{4B34AAEE-0ADE-4DB3-B870-46A87720F710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{53B77896-7519-4A9B-978F-47AA2350722F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B77896-7519-4A9B-978F-47AA2350722F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B77896-7519-4A9B-978F-47AA2350722F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B34AAEE-0ADE-4DB3-B870-46A87720F710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B34AAEE-0ADE-4DB3-B870-46A87720F710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B34AAEE-0ADE-4DB3-B870-46A87720F710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B34AAEE-0ADE-4DB3-B870-46A87720F710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
