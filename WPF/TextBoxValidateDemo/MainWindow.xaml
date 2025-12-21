@@ -1,12 +1,116 @@
-﻿<Window x:Class="TextBoxValidateDemo.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TextBoxValidateDemo"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+﻿<Window
+    x:Class="TextBoxValidateDemo.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TextBoxValidateDemo"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance local:MainWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="ObservableValidator">
+            <StackPanel Margin="10">
+                <TextBox>
+                    <TextBox.Text>
+                        <Binding Path="UserName" UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnNotifyDataErrors="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule></DataErrorValidationRule>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Text="{Binding Age,UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
+                <Button
+                    Height="30"
+                    Content="Register"
+                    FontSize="24" />
+                <TextBlock Text="{Binding Error}" Foreground="Red"></TextBlock>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="INotifyDataErrorInfo">
+            <StackPanel Margin="10">
+                <TextBox>
+                    <TextBox.Text>
+                        <Binding Path="UserName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule></DataErrorValidationRule>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Text="{Binding Age,UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+                <Button
+                    Height="30"
+                    Content="Register"
+                    FontSize="24" />
+                <TextBlock Text="{Binding Error}" Foreground="Red"></TextBlock>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="IDataErrorInfo">
+            <StackPanel Margin="10">
+                <TextBox>
+                    <TextBox.Text>
+                        <Binding Path="UserName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule></DataErrorValidationRule>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Text="{Binding Age,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                <Button
+                    Height="30"
+                    Content="Register"
+                    FontSize="24" />
+                <TextBlock Text="{Binding Error}" Foreground="Red"></TextBlock>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="ValidationRule">
+            <StackPanel Margin="10">
+                <TextBox>
+                    <TextBox.Text>
+                        <Binding Path="UserName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <ExceptionValidationRule />
+                                <local:StringLengthRule MinLength="6" MaxLength="10" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox Text="{Binding Age}" />
+                <Button
+                    Height="30"
+                    Content="Register"
+                    FontSize="24" />
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="ValidatesOnException">
+            <StackPanel Margin="10">
+                <TextBox Text="{Binding UserName, ValidatesOnExceptions=True}" />
+                <TextBox Text="{Binding Age}" />
+                <Button
+                    Height="30"
+                    Content="Register"
+                    FontSize="24" />
+            </StackPanel>
+        </TabItem>
+    </TabControl>
 </Window>
