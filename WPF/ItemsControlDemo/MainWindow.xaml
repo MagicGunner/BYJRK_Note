@@ -19,8 +19,164 @@
         <conv:OrdinalIndexConverter x:Key="OrdinalIndexConverter" />
         <conv:CollectionElementIndexConverter x:Key="CollectionElementIndexConverter" />
         <conv:ItemIndexConverter x:Key="IndexConverter" />
+        <conv:PreviousIndexConverter x:Key="PreviousIndexConverter"></conv:PreviousIndexConverter>
     </Window.Resources>
     <TabControl>
+
+        <!--  第三节课，如何保证前一节课后两种方法中元素删除序号不更新的问题  -->
+        <TabItem Header="ItemsControl2">
+            <DockPanel>
+                <Button
+                    Width="200"
+                    Height="70"
+                    HorizontalAlignment="Left"
+                    Command="{Binding RemoveCommand}"
+                    Content="Remove"
+                    DockPanel.Dock="Bottom" />
+                <TabControl>
+                    <TabItem Header="Model">
+                        <ListBox
+                            Padding="5"
+                            ItemsSource="{Binding Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="30" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="20"
+                                            VerticalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource PreviousIndexConverter}"
+                                                              StringFormat="{}{0}">
+                                                    <Binding></Binding>
+                                                    <Binding RelativeSource="{RelativeSource PreviousData}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="Model">
+                        <ListBox
+                            Padding="5"
+                            ItemsSource="{Binding Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="30" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="20"
+                                            VerticalAlignment="Center" Text="{Binding Index}">
+                                        </TextBlock>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="Indexes">
+                        <ListBox
+                            Padding="5"
+                            ItemsSource="{Binding Items}">
+                            <ListBox.Template>
+                                <ControlTemplate TargetType="ListBox">
+                                    <ScrollViewer>
+                                        <DockPanel>
+                                            <ItemsControl DockPanel.Dock="Left" ItemsSource="{Binding Indexes}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemContainerStyle>
+                                                    <Style TargetType="ContentPresenter">
+                                                        <Setter Property="Height" Value="34"></Setter>
+                                                    </Style>
+                                                </ItemsControl.ItemContainerStyle>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"></TextBlock>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <ItemsPresenter />
+                                        </DockPanel>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ListBox.Template>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="30" Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="MultiBinding(Items.Count)">
+                        <ListBox
+                            Padding="5"
+                            AlternationCount="100000"
+                            ItemsSource="{Binding Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="30" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="20"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding
+                                                    Converter="{StaticResource CollectionElementIndexConverter}"
+                                                    StringFormat="{}{0}">
+                                                    <Binding />
+                                                    <Binding Path="DataContext.Items"
+                                                             RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                                    <Binding Path="DataContext.Items.Count"
+                                                             RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="MultiBinding(Binding Items)">
+                        <ListBox
+                            Padding="5"
+                            AlternationCount="100000"
+                            ItemsSource="{Binding Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="30" Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="20"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding
+                                                    Converter="{StaticResource CollectionElementIndexConverter}"
+                                                    StringFormat="{}{0}">
+                                                    <Binding />
+                                                    <Binding Path="DataContext.Items"
+                                                             RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                </TabControl>
+            </DockPanel>
+        </TabItem>
+
+        <!--  第二节课  -->
         <TabItem Header="ItemsControl1">
             <DockPanel>
                 <Button
@@ -79,9 +235,12 @@
                                             Margin="0,0,10,0"
                                             VerticalAlignment="Center">
                                             <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource CollectionElementIndexConverter}" StringFormat="{}{0}">
+                                                <MultiBinding
+                                                    Converter="{StaticResource CollectionElementIndexConverter}"
+                                                    StringFormat="{}{0}">
                                                     <Binding />
-                                                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                                    <Binding Path="ItemsSource"
+                                                             RelativeSource="{RelativeSource AncestorType=ListBox}" />
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>

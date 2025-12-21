@@ -50,31 +50,46 @@ public partial class MainWindowViewModel : ObservableObject {
 
     #endregion
 
+    public MainWindowViewModel() {
+        UpdateItems();
+    }
+
+    private void UpdateItems() {
+        for (var i = 0; i < Items.Count; i++) { Items[i].Index = i + 1; }
+    }
+
     #region ItemsControl1
 
     [ObservableProperty]
-    private ObservableCollection<string> _items = [
-                                                      "first item",
-                                                      "second item",
-                                                      "third item",
-                                                      "fourth item",
-                                                      "fifth item",
-                                                      "sixth item",
-                                                      "seventh item",
-                                                      "eighth item",
-                                                      "ninth item",
-                                                      "tenth item",
-                                                      "eleventh item",
-                                                      "twelfth item",
-                                                      "thirteenth item",
-                                                      "fourteenth item",
-                                                      "fifteenth item",
-                                                      "sixteenth item"
-                                                  ];
+    private ObservableCollection<Model> _items = [
+                                                     "first item",
+                                                     "second item",
+                                                     "third item",
+                                                     "fourth item",
+                                                     "fifth item",
+                                                     "sixth item",
+                                                     "seventh item",
+                                                     "eighth item",
+                                                     "ninth item",
+                                                     "tenth item",
+                                                     "eleventh item",
+                                                     "twelfth item",
+                                                     "thirteenth item",
+                                                     "fourteenth item",
+                                                     "fifteenth item",
+                                                     "sixteenth item"
+                                                 ];
+
+    public IEnumerable<int> Indexes => Enumerable.Range(1, Items.Count);
 
     [RelayCommand]
     private void Remove() {
         Items.RemoveAt(4);
+        // OnPropertyChanged(nameof(Items));
+
+        OnPropertyChanged(nameof(Indexes));
+
+        UpdateItems();
     }
 
     #endregion
@@ -128,5 +143,25 @@ public class EmployeeTemplateSelector : DataTemplateSelector {
 }
 
 #endregion
+
+#endregion
+
+#region ItemsControl2
+
+public partial class Model : ObservableObject, IIndex {
+    [ObservableProperty]
+    private int? _index;
+
+    [ObservableProperty]
+    private string? _content;
+
+    public static implicit operator Model(string c) => new Model { Content = c };
+
+    public override string? ToString() => Content;
+}
+
+public interface IIndex {
+    int? Index { get; set; }
+}
 
 #endregion
