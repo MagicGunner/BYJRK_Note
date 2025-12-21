@@ -3,10 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ItemsControlDemo;
 
 public partial class MainWindowViewModel : ObservableObject {
+    #region ItemsControl
+
     /// <summary>
     /// 一些字符串，用来展示基础的 ItemsSource 绑定，奇偶行交替颜色，以及表头
     /// </summary>
@@ -44,7 +47,40 @@ public partial class MainWindowViewModel : ObservableObject {
                                                                    new("Tony", Gender.Male, 40),
                                                                    new("Brian", Gender.Male, 36)
                                                                ];
+
+    #endregion
+
+    #region ItemsControl1
+
+    [ObservableProperty]
+    private ObservableCollection<string> _items = [
+                                                      "first item",
+                                                      "second item",
+                                                      "third item",
+                                                      "fourth item",
+                                                      "fifth item",
+                                                      "sixth item",
+                                                      "seventh item",
+                                                      "eighth item",
+                                                      "ninth item",
+                                                      "tenth item",
+                                                      "eleventh item",
+                                                      "twelfth item",
+                                                      "thirteenth item",
+                                                      "fourteenth item",
+                                                      "fifteenth item",
+                                                      "sixteenth item"
+                                                  ];
+
+    [RelayCommand]
+    private void Remove() {
+        Items.RemoveAt(4);
+    }
+
+    #endregion
 }
+
+#region ItemsControl
 
 #region Canvas
 
@@ -90,5 +126,7 @@ public class EmployeeTemplateSelector : DataTemplateSelector {
                };
     }
 }
+
+#endregion
 
 #endregion
