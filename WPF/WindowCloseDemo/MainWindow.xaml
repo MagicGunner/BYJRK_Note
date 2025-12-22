@@ -87,6 +87,16 @@
                 Command="{Binding CloseWithParameterCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                 Content="X(传窗口)" />
+
+            <Button
+                Background="LightCoral"
+                Command="{Binding CloseByMessageCommand}"
+                Content="X(Message VM -> V)" />
+
+            <Button
+                Background="LightCoral"
+                Click="ButtonBase_OnClick_1"
+                Content="X(Message V -> VM)" />
         </StackPanel>
     </Grid>
 </Window>

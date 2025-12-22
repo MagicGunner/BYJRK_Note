@@ -8,7 +8,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using WindowCloseDemo.Interface;
+using WindowCloseDemo.Messages;
 
 namespace WindowCloseDemo;
 
@@ -18,6 +21,12 @@ namespace WindowCloseDemo;
 public partial class MainWindow : Window, ICloseWindow {
     public MainWindow() {
         InitializeComponent();
+
+        WeakReferenceMessenger.Default.Register<CloseWindowMessage>(this, (_, m) => {
+                                                                              if (m.Sender == DataContext) {
+                                                                                  Close();
+                                                                              }
+                                                                          });
     }
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
@@ -31,4 +40,11 @@ public partial class MainWindow : Window, ICloseWindow {
     }
 
     public void CloseWindow() => Close();
+
+    private void ButtonBase_OnClick_1(object sender, RoutedEventArgs e) {
+        var response = WeakReferenceMessenger.Default.Send(new RequestMessage<bool>());
+        if (response.Response) {
+            Close();
+        }
+    }
 }
