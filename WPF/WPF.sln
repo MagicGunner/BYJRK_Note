@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFStyles", "WPFStyles\WPFS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextBoxValidateDemo", "TextBoxValidateDemo\TextBoxValidateDemo.csproj", "{3F1F2427-B70D-4D23-84FB-7AE9C3EF8CFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowCloseDemo", "WindowCloseDemo\WindowCloseDemo.csproj", "{8EF2B9E9-DCD7-4789-8BA3-B7CF1FFB8F37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{3F1F2427-B70D-4D23-84FB-7AE9C3EF8CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F1F2427-B70D-4D23-84FB-7AE9C3EF8CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F1F2427-B70D-4D23-84FB-7AE9C3EF8CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EF2B9E9-DCD7-4789-8BA3-B7CF1FFB8F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EF2B9E9-DCD7-4789-8BA3-B7CF1FFB8F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EF2B9E9-DCD7-4789-8BA3-B7CF1FFB8F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EF2B9E9-DCD7-4789-8BA3-B7CF1FFB8F37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
