@@ -17,6 +17,7 @@
     <Window.Resources>
         <sys:String x:Key="Str">MissBlue</sys:String>
         <local:MyResource x:Key="MyResource" />
+        <local:BindingProxy x:Key="MyButton" Data="{Binding ElementName=Btn}"></local:BindingProxy>
     </Window.Resources>
 
     <StackPanel
@@ -97,6 +98,14 @@
             </Grid>
 
         </StackPanel>
+
+        <Button Content="Click Me" Name="Btn">
+            <Button.ToolTip>
+                <ToolTip>
+                    <TextBlock Text="{Binding Source={StaticResource MyButton} ,Path=Data.Content}"></TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
 
     </StackPanel>
 
